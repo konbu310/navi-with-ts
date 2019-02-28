@@ -1,12 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { Suspense } from "react";
+import { mount, route } from "navi";
+import { Router, View } from "react-navi";
+import * as Styled from "styled-components";
+import { Landing } from "./Landing";
+import { api } from "./api";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const routes = mount({
+  "/": route({
+    title: "Programming Language",
+    getData: () => api.fetchAll(),
+    view: <Landing />,
+  }),
+});
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+ReactDOM.render(
+  <Router routes={routes}>
+    <Suspense fallback={<h1>Now Loading...</h1>}>
+      <View />
+    </Suspense>
+  </Router>,
+  document.getElementById("root")
+);
